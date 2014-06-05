@@ -1,6 +1,7 @@
 var express = require('express'),
     clothes = require('./routes/clothes'),
 	users = require('./routes/users');
+	photos = require('./routes/photos')
  
 var app = express();
 
@@ -17,8 +18,10 @@ app.get('/clothes', clothes.findAll);
 
 app.post('/users', users.addUser);
 app.get('/users', users.findAll);
-app.get('/users/:id', users.findById)
-app.put('/users/:id', users.updateUser)
+app.get('/users/:id', users.findById);
+app.put('/users/:id', users.updateUser);
+
+app.post('photos', photos.uploadFile);
 
 app.listen(3000,'192.168.1.106');
 console.log('Listening on port 3000...');
