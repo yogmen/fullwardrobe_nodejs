@@ -10,8 +10,8 @@ app.configure(function(){
 });
 
 app.get('/clothes', clothes.findAll);
-//app.get('/clothes/:id', clothes.findById);
-// app.post('/clothes', clothes.addWine);
+app.get('/clothes/:id', clothes.findById);
+app.post('/clothes', clothes.addClothes);
 //app.put('/clothes/:id', clothes.updateWine);
 //app.delete('/clothes/:id', clothes.deleteWine);
 

@@ -21,6 +21,31 @@ db.open(function(err, db) {
     }
 });
 
+exports.addClothes = function(req, res) {
+    var clothes = req.body;
+    console.log('Adding clothes: ' + JSON.stringify(user));
+    db.collection(collection_clothes, function(err, collection) {
+        collection.insert(clothes, {safe:true}, function(err, result) {
+            if (err) {
+                res.send({'error':'An error has occurred'});
+            } else {
+                console.log('Success: ' + JSON.stringify(result[0]));
+                res.send(result[0]);
+            }
+        });
+    });
+};
+
+exports.findById = function(req, res) {
+    var id = req.params.id;
+    console.log('Retrieving clothes: ' + id);
+    db.collection(collection_clothes, function(err, collection) {
+        collection.findOne({'_id':new BSON.ObjectID(id)}, function(err, item) {
+            res.send(item);
+        });
+    });
+};
+
 exports.findAll = function(req, res) {
     db.collection(collection_clothes, function(err, collection) {
         collection.find().toArray(function(err, items) {
@@ -28,7 +53,6 @@ exports.findAll = function(req, res) {
         });
     });
 };
-
 
 var populateDB = function() {
  
