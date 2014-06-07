@@ -1,6 +1,13 @@
+var collection_images = 'images';
+
 var path = require('path');
-var fs = require('fs'),
-    MongoClient = require('mongodb').MongoClient, db;
+var fs = require('fs');
+var mongo = require('mongodb');
+
+var Server = mongo.Server;
+var Db = mongo.Db;
+var BSON = mongo.BSONPure;
+    MongoClient = mongo.MongoClient, db;
 
 
 var url = "mongodb://localhost:27017/fullwardrobedb";
@@ -32,7 +39,7 @@ exports.addPhoto = function(req,res,next){
         lastIndex = filePath.lastIndexOf("/"),
         tmpFileName = filePath.substr(lastIndex + 1),
         image = req.body,
-        images = db.collection('images');
+        images = db.collection(collection_images);
     
     image.fileName = tmpFileName;
     console.log('New file: ' + tmpFileName);
@@ -59,6 +66,12 @@ exports.getPhotos = function(req, res, next) {
 };
 
 exports.getPhoto = function (req, res) {
-    var fileName = req.params.id;
-    res.sendfile(path.resolve('./uploads/' + fileName));
+    var id = req.params.id;
+    console.log('ID: ' + id);
+    db.collection(collection_images, function(err, collection) {
+        collection.findOne({'_id':new BSON.ObjectID(id)}, function(err, item) {
+            console.info(item);
+            res.sendfile(path.resolve('./uploads/' + item.fileName));
+        });
+    });
 };
