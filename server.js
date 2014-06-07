@@ -29,6 +29,8 @@ app.get('/users/:id', users.findById);
 app.put('/users/:id', users.updateUser);
 
 app.post('/photos', photos.addPhoto);
+app.get('/photos', photos.getPhotos);
+app.get('/photos/:id', photos.getPhoto);
 
 app.listen(3000,'192.168.1.8');
 console.log('Listening on port 3000...');

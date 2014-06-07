@@ -1,3 +1,4 @@
+var path = require('path');
 var fs = require('fs'),
     MongoClient = require('mongodb').MongoClient, db;
 
@@ -43,4 +44,21 @@ exports.addPhoto = function(req,res,next){
         }
         res.json(image);
     });
-}
+};
+
+exports.getPhotos = function(req, res, next) {
+    var images = db.collection('images');
+
+    images.find().sort({ _id: -1 }).limit(20).toArray(function (err, data) {
+        if (err) {
+            console.log(err);
+            return next(err);
+        }
+        res.json(data);
+    });
+};
+
+exports.getPhoto = function (req, res) {
+    var fileName = req.params.id;
+    res.sendfile(path.resolve('./uploads/' + fileName));
+};
