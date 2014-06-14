@@ -20,7 +20,7 @@ app.configure(function(){
 app.get('/clothes', clothes.findAll);
 app.get('/clothes/:id', clothes.findById);
 app.post('/clothes', clothes.addClothes);
-//app.put('/clothes/:id', clothes.updateWine);
+app.put('/clothes/:id', clothes.updateClothes);
 //app.delete('/clothes/:id', clothes.deleteWine);
 
 app.post('/users', users.addUser);
@@ -28,9 +28,9 @@ app.get('/users', users.findAll);
 app.get('/users/:id', users.findById);
 app.put('/users/:id', users.updateUser);
 
-app.post('/photos', photos.addPhoto);
+app.post('/photos', photos.upload);
 app.get('/photos', photos.getPhotos);
 app.get('/photos/:id', photos.getPhoto);
 
-app.listen(3000,'192.168.1.8');
+app.listen(3000,'192.168.1.106');
 console.log('Listening on port 3000...');

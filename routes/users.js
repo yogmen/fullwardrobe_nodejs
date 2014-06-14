@@ -23,7 +23,7 @@ db.open(function(err, db) {
 
 exports.addUser = function(req, res) {
     var user = req.body;
-	user.creation_date = new Date();
+	// user.creation_date = new Date();
     console.log('Adding user: ' + JSON.stringify(user));
     db.collection(collection_users, function(err, collection) {
         collection.insert(user, {safe:true}, function(err, result) {

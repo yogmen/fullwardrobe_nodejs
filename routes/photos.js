@@ -31,26 +31,25 @@ fs.exists(__dirname + '/uploads', function(exists){
     }
 });
 
-exports.addPhoto = function(req,res,next){
-    console.log('Starting upload file');
-    
-    var file = req.files.file,
-        filePath = req.files.file.path,
-        lastIndex = filePath.lastIndexOf("/"),
-        tmpFileName = filePath.substr(lastIndex + 1),
-        image = req.body,
-        images = db.collection(collection_images);
-    
-    image.fileName = tmpFileName;
-    console.log('New file: ' + tmpFileName);
-    
-    images.insert(image, function (err, result) {
-        if (err) {
-            console.log(err);
-            return next(err);
-        }
-        res.json(image);
-    });
+exports.upload = function(req, res){
+	console.log("Received file:\n" + JSON.stringify(req.files));
+
+	var photoDir = __dirname+"/uploads";
+	var photoName = req.files.source.path;
+    var lastIndex = photoName.lastIndexOf("/");
+    var tmpFileName = photoName.substr(lastIndex + 1);
+	
+	var images_db = db.collection(collection_images);
+	var image = req.body;
+
+	image.fileName = tmpFileName;
+	images_db.insert(image, function (err, result) {
+	        if (err) {
+	            console.log("BLAD: " + err);
+				res.send({error:"Not inserted"});
+	        }
+	        res.json(image);
+	    });
 };
 
 exports.getPhotos = function(req, res, next) {

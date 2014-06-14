@@ -41,7 +41,12 @@ exports.findById = function(req, res) {
     console.log('Retrieving clothes: ' + id);
     db.collection(collection_clothes, function(err, collection) {
         collection.findOne({'_id':new BSON.ObjectID(id)}, function(err, item) {
-            res.send(item);
+            if (err) {
+                res.send({'error':'An error has occurred'});
+            } else {
+                console.log('Success: ' + JSON.stringify(result[0]));
+                res.send(item);
+            }
         });
     });
 };
@@ -49,10 +54,33 @@ exports.findById = function(req, res) {
 exports.findAll = function(req, res) {
     db.collection(collection_clothes, function(err, collection) {
         collection.find().toArray(function(err, items) {
-            res.send(items);
+            if (err) {
+                res.send({'error':'An error has occurred'});
+            } else {
+                console.log('Success: ' + JSON.stringify(result[0]));
+                res.send(items);
+            }
         });
     });
 };
+
+exports.updateClothes = function(req, res) {
+    var id = req.params.id;
+    var clothes = req.body;
+    console.log('Updating clothes: ' + id);
+    console.log(JSON.stringify(clothes));
+    db.collection(collection_clothess, function(err, collection) {
+        collection.update({'_id':new BSON.ObjectID(id)}, clothes, {safe:true}, function(err, result) {
+            if (err) {
+                console.log('Error updating clothes: ' + err);
+                res.send({'error':'An error has occurred'});
+            } else {
+                console.log('' + result + ' document(s) updated');
+                res.send(clothes);
+            }
+        });
+    });
+}
 
 var populateDB = function() {
  
