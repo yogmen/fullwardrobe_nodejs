@@ -2,9 +2,9 @@ var collection_clothes = 'clothes';
 
 var mongo = require('mongodb');
  
-var Server = mongo.Server,
-    Db = mongo.Db,
-    BSON = mongo.BSONPure;
+var Server = mongo.Server;
+var Db = mongo.Db;
+var BSON = mongo.BSONPure;
  
 var server = new Server('localhost', 27017, {auto_reconnect: true});
 db = new Db('fullwardrobedb', server);
@@ -14,7 +14,7 @@ db.open(function(err, db) {
         console.log("Connected to 'clothes' database");
         db.collection(collection_clothes, {strict:true}, function(err, collection) {
             if (err) {
-                console.log("The 'wines' collection doesn't exist. Creating it with sample data...");
+                console.log("The 'clothes' collection doesn't exist. Creating it with sample data...");
                 populateDB();
             }
         });
@@ -23,7 +23,7 @@ db.open(function(err, db) {
 
 exports.addClothes = function(req, res) {
     var clothes = req.body;
-    console.log('Adding clothes: ' + JSON.stringify(user));
+    console.log('Adding clothes: ' + JSON.stringify(clothes));
     db.collection(collection_clothes, function(err, collection) {
         collection.insert(clothes, {safe:true}, function(err, result) {
             if (err) {
@@ -57,12 +57,12 @@ exports.findAll = function(req, res) {
             if (err) {
                 res.send({'error':'An error has occurred'});
             } else {
-                console.log('Success: ' + JSON.stringify(result[0]));
+                console.log('Success: ' + JSON.stringify(items));
                 res.send(items);
             }
         });
     });
-};
+}
 
 exports.updateClothes = function(req, res) {
     var id = req.params.id;
@@ -77,6 +77,21 @@ exports.updateClothes = function(req, res) {
             } else {
                 console.log('' + result + ' document(s) updated');
                 res.send(clothes);
+            }
+        });
+    });
+}
+
+exports.deleteClothes = function(req, res) {
+    var id = req.params.id;
+    console.log('Deleting clothes: ' + id);
+    db.collection(collection_clothes, function(err, collection) {
+        collection.remove({'_id':new BSON.ObjectID(id)}, {safe:true}, function(err, result) {
+            if (err) {
+                res.send({'error':'An error has occurred - ' + err});
+            } else {
+                console.log('' + result + ' document(s) deleted');
+                res.send(req.body);
             }
         });
     });

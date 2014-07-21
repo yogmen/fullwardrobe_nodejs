@@ -2,8 +2,9 @@ var express = require('express'),
     http = require('http'),
     path = require('path'),
     clothes = require('./routes/clothes'),
-	users = require('./routes/users');
-	photos = require('./routes/photos')
+	users = require('./routes/users'),
+	photos = require('./routes/photos'),
+	messages = require('./routes/messages');
  
 var app = express();
 
@@ -21,7 +22,7 @@ app.get('/clothes', clothes.findAll);
 app.get('/clothes/:id', clothes.findById);
 app.post('/clothes', clothes.addClothes);
 app.put('/clothes/:id', clothes.updateClothes);
-//app.delete('/clothes/:id', clothes.deleteWine);
+app.delete('/clothes/:id', clothes.deleteClothes);
 
 app.post('/users', users.addUser);
 app.get('/users', users.findAll);
@@ -32,5 +33,10 @@ app.post('/photos', photos.upload);
 app.get('/photos', photos.getPhotos);
 app.get('/photos/:id', photos.getPhoto);
 
-app.listen(3000,'192.168.1.106');
+app.get('/messages', messages.findAll);
+app.post('/messages', messages.sendMessage);
+
+
+// app.listen(3000,'10.61.247.216);
+app.listen(3000);
 console.log('Listening on port 3000...');

@@ -11,6 +11,7 @@ var BSON = mongo.BSONPure;
 
 
 var url = "mongodb://localhost:27017/fullwardrobedb";
+
 MongoClient.connect(url, {native_parser: true}, function (err, connection) {
     if (err) {
         console.log("Cannot connect to database " + url);
