@@ -32,8 +32,8 @@ exports.findAll = function(req, res) {
 exports.sendMessage = function(req, res) {
     var message = req.body;
 	// user.creation_date = new Date();
-    console.log('Saving message: ' + JSON.stringify(user));
-    db.collection(collection_users, function(err, collection) {
+    console.log('Saving message: ' + JSON.stringify(message));
+    db.collection(collections_messages, function(err, collection) {
         collection.insert(message, {safe:true}, function(err, result) {
             if (err) {
                 res.send({'error':'An error has occurred'});
@@ -41,6 +41,16 @@ exports.sendMessage = function(req, res) {
                 console.log('Success: ' + JSON.stringify(result[0]));
                 res.send(result[0]);
             }
+        });
+    });
+}
+
+exports.getMessage = function(req, res) {
+	var userId = req.params.id;
+	console.log('Getting message: ' + JSON.stringify(userId));
+    db.collection(collections_messages, function(err, collection) {
+        collection.findOne({'_id':new BSON.ObjectID(id)}, function(err, item) {
+            res.send(item);
         });
     });
 }

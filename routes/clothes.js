@@ -97,6 +97,21 @@ exports.deleteClothes = function(req, res) {
     });
 }
 
+exports.findUserClothes = function(req, res) {
+	var id = req.params.id;
+	console.log('Finding clothes for user: ' + id);
+    db.collection(collection_clothes, function(err, collection) {
+        collection.find({userId:id}).toArray(function(err, items) {
+            if (err) {
+                res.send({'error':'An error has occurred'});
+            } else {
+                console.log('Success: ' + JSON.stringify(items));
+                res.send(items);
+            }
+        });
+    });
+}
+
 var populateDB = function() {
  
     var clothes = 

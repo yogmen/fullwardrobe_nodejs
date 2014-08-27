@@ -23,6 +23,7 @@ app.get('/clothes/:id', clothes.findById);
 app.post('/clothes', clothes.addClothes);
 app.put('/clothes/:id', clothes.updateClothes);
 app.delete('/clothes/:id', clothes.deleteClothes);
+app.get('/userClothes/:id', clothes.findUserClothes);
 
 app.post('/users', users.addUser);
 app.get('/users', users.findAll);
@@ -35,7 +36,7 @@ app.get('/photos/:id', photos.getPhoto);
 
 app.get('/messages', messages.findAll);
 app.post('/messages', messages.sendMessage);
-
+app.get('/messages:id', messages.getMessage);
 
 // app.listen(3000,'10.61.247.216);
 app.listen(3000);
