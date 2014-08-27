@@ -3,6 +3,8 @@ var collection_images = 'images';
 var path = require('path');
 var fs = require('fs');
 var mongo = require('mongodb');
+var formidable = require('formidable');
+var im = require('imagemagick');
 
 var Server = mongo.Server;
 var Db = mongo.Db;
@@ -11,6 +13,8 @@ var BSON = mongo.BSONPure;
 
 
 var url = "mongodb://localhost:27017/fullwardrobedb";
+var photoDir = __dirname + '/uploads/fullsize/';
+var thumbDir = __dirname + '/uploads/thumbs/';
 
 MongoClient.connect(url, {native_parser: true}, function (err, connection) {
     if (err) {
@@ -33,25 +37,60 @@ fs.exists(__dirname + '/uploads', function(exists){
 });
 
 exports.upload = function(req, res){
-	console.log("Received file:\n" + JSON.stringify(req.files));
-
-	var photoDir = __dirname+"/uploads";
-	var photoName = req.files.source.path;
-    var lastIndex = photoName.lastIndexOf("/");
-    var tmpFileName = photoName.substr(lastIndex + 1);
-	
+	var form = formidable.IncomingForm();
 	var images_db = db.collection(collection_images);
-	var image = req.body;
-
-	image.fileName = tmpFileName;
-	images_db.insert(image, function (err, result) {
-	        if (err) {
-	            console.log("BLAD: " + err);
-				res.send({error:"Not inserted"});
-	        }
-	        res.json(image);
-	    });
-};
+	
+	form.parse(req, function(err, fields, files){
+		if(err){
+			console.log('parse');
+			res.writeHead(500,{'Content-type':'text/plain'});
+			res.end("Something wrong");
+			return
+		}
+		
+		fs.readFile(files.image.path, function(err, data){
+			var imageName = files.image.name;
+			if(!imageName){
+				console.log('image name');
+				res.writeHead(500,{'Content-type':'text/plain'});
+				res.end('Something wrong');
+				res.end();
+			}else{
+				var fullPath = photoDir + imageName;
+				var thumbPath = thumbDir + imageName;
+				fs.writeFile(fullPath, data, function(err){
+					im.resize({
+						srcPath: fullPath,
+						dstPath: thumbPath,
+						width:100
+					},function(err, stdout, stderr){
+						if(err){
+							console.log(err);
+							res.writeHead(500,{'Content-type':'text/plain'});
+							res.end('Something wrong');
+							res.end();
+						}else{
+							var insertedImage = req.body;
+							insertedImage.fileName = imageName;
+							insertedImage.thumbName = imageName;
+							images_db.insert(insertedImage, function(err, result){
+								if(err){
+									console.log(err);
+									res.writeHead(500,{'Content-type':'text/plain'});
+									res.end('Something wrong');
+									res.end();
+								}else{
+									console.log(JSON.stringify(insertedImage));
+									res.json(insertedImage);
+								}
+							});
+						}
+					});
+				});
+			}
+		});
+	});
+}
 
 exports.getPhotos = function(req, res, next) {
     var images = db.collection('images');

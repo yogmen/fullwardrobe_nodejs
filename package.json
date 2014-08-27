@@ -5,6 +5,7 @@
   "private": true,
   "dependencies": {
 	"imagemagick":"*",
+	"formidable":"*",
     "express": "3.x",
     "connect-flash": "~0.1.1",
     "passport-stormpath": "~0.1.2",

@@ -11,11 +11,11 @@ var app = express();
 app.configure(function(){
 	app.use(express.logger('dev'));
     app.use(express.json());
-    app.use(express.multipart({
-        uploadDir:__dirname +  '/uploads',
-        keepExtensions: true
-    }));
-    app.use(express.static(path.join(__dirname, './uploads')));
+    // app.use(express.multipart({
+    //     uploadDir:__dirname +  '/uploads',
+    //     keepExtensions: true
+    // }));
+    // app.use(express.static(path.join(__dirname, './uploads')));
 });
 
 app.get('/clothes', clothes.findAll);
