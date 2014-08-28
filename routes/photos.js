@@ -42,52 +42,53 @@ exports.upload = function(req, res){
 	
 	form.parse(req, function(err, fields, files){
 		if(err){
-			console.log('parse');
+			console.log('parsing issue');
 			res.writeHead(500,{'Content-type':'text/plain'});
-			res.end("Something wrong");
-			return
+			res.write('prasing issue');
+			res.end();
+			return;
 		}
 		
 		fs.readFile(files.image.path, function(err, data){
 			var imageName = files.image.name;
 			if(!imageName){
-				console.log('image name');
+				console.log('image issue');
 				res.writeHead(500,{'Content-type':'text/plain'});
-				res.end('Something wrong');
+				res.write('parsing issue');
 				res.end();
-			}else{
-				var fullPath = photoDir + imageName;
-				var thumbPath = thumbDir + imageName;
-				fs.writeFile(fullPath, data, function(err){
-					im.resize({
-						srcPath: fullPath,
-						dstPath: thumbPath,
-						width:100
-					},function(err, stdout, stderr){
+				return;
+			}
+			var fullPath = photoDir + imageName;
+			var thumbPath = thumbDir + imageName;
+			fs.writeFile(fullPath, data, function(err){
+				im.resize({
+					srcPath: fullPath,
+					dstPath: thumbPath,
+					width:100
+				},function(err, stdout, stderr){
+					if(err){
+						console.log(err);
+						res.writeHead(500,{'Content-type':'text/plain'});
+						res.write('resizing issue');
+						res.end();
+						return;
+					}
+					var insertedImage = req.body;
+					insertedImage.fileName = imageName;
+					insertedImage.thumbName = imageName;
+					images_db.insert(insertedImage, function(err, result){
 						if(err){
 							console.log(err);
 							res.writeHead(500,{'Content-type':'text/plain'});
-							res.end('Something wrong');
+							res.write('inserting issue');
 							res.end();
-						}else{
-							var insertedImage = req.body;
-							insertedImage.fileName = imageName;
-							insertedImage.thumbName = imageName;
-							images_db.insert(insertedImage, function(err, result){
-								if(err){
-									console.log(err);
-									res.writeHead(500,{'Content-type':'text/plain'});
-									res.end('Something wrong');
-									res.end();
-								}else{
-									console.log(JSON.stringify(insertedImage));
-									res.json(insertedImage);
-								}
-							});
+							return;
 						}
+						console.log(JSON.stringify(insertedImage));
+						res.json(insertedImage);
 					});
 				});
-			}
+			});
 		});
 	});
 }
@@ -104,13 +105,38 @@ exports.getPhotos = function(req, res, next) {
     });
 };
 
-exports.getPhoto = function (req, res) {
+exports.getPhotoFull = function (req, res) {
     var id = req.params.id;
     console.log('ID: ' + id);
     db.collection(collection_images, function(err, collection) {
         collection.findOne({'_id':new BSON.ObjectID(id)}, function(err, item) {
+			if(err){
+				console.log(err);
+				res.writeHead(404,{'Content-type':'text/plain'});
+				res.write('not found object');
+				res.end();
+				return;
+			};
             console.info(item);
-            res.sendfile(path.resolve('./uploads/' + item.fileName));
+            res.sendfile(path.resolve(photoDir + item.fileName));
         });
     });
+};
+
+exports.getPhotoThumb = function (req, res){
+	var id = req.params.id;
+	console.log('id: ' + id);
+	db.collection(collection_images, function(err, collection){
+		collection.findOne({'_id':new BSON.ObjectID(id)}, function(err, item){
+			if(err){
+				console.log(err);
+				res.writeHead(404,{'Content-type':'text/plain'});
+				res.write('not found object');
+				res.end();
+				return;
+			}
+			console.info(item);
+			res.sendfile(path.resolve(thumbDir + item.thumbName));
+		})
+	});
 };

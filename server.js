@@ -11,11 +11,6 @@ var app = express();
 app.configure(function(){
 	app.use(express.logger('dev'));
     app.use(express.json());
-    // app.use(express.multipart({
-    //     uploadDir:__dirname +  '/uploads',
-    //     keepExtensions: true
-    // }));
-    // app.use(express.static(path.join(__dirname, './uploads')));
 });
 
 app.get('/clothes', clothes.findAll);
@@ -32,12 +27,12 @@ app.put('/users/:id', users.updateUser);
 
 app.post('/photos', photos.upload);
 app.get('/photos', photos.getPhotos);
-app.get('/photos/:id', photos.getPhoto);
+app.get('/photos/full/:id', photos.getPhotoFull);
+app.get('/photos/thumb/:id', photos.getPhotoThumb)
 
 app.get('/messages', messages.findAll);
 app.post('/messages', messages.sendMessage);
 app.get('/messages:id', messages.getMessage);
 
-// app.listen(3000,'10.61.247.216);
 app.listen(3000);
 console.log('Listening on port 3000...');
