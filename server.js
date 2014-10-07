@@ -1,17 +1,18 @@
-var express = require('express'),
-    http = require('http'),
-    path = require('path'),
-    clothes = require('./routes/clothes'),
-	users = require('./routes/users'),
-	photos = require('./routes/photos'),
-	messages = require('./routes/messages');
- 
+var express = require('express');
+var logger = require('morgan');
+var body_parser = require('body-parser');
+
+var clothes = require('./routes/clothes');
+var	users = require('./routes/users');
+var	photos = require('./routes/photos');
+var	messages = require('./routes/messages');
+
+
+
 var app = express();
 
-app.configure(function(){
-	app.use(express.logger('dev'));
-    app.use(express.json());
-});
+app.use(logger('dev'));
+app.use(body_parser());
 
 app.get('/clothes', clothes.findAll);
 app.get('/clothes/:id', clothes.findById);
