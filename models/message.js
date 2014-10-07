@@ -23,7 +23,7 @@ var MessageSchema = new mongoose.Schema({
     },
     readed: {
         type: Boolean,
-        required: true
+        default: false
     }
 });
 

@@ -1,18 +1,30 @@
 var express = require('express');
 var logger = require('morgan');
 var body_parser = require('body-parser');
+var mongoose = require('mongoose');
 
 var clothes = require('./routes/clothes');
 var	users = require('./routes/users');
 var	photos = require('./routes/photos');
 var	messages = require('./routes/messages');
 
+var messageController = require('./controllers/message');
+
 
 
 var app = express();
+var router = express.Router();
+mongoose.connect('mongodb://localhost:27017/fullwardrobedb');
+
+router.route('/messages')
+    .post(messageController.sendMessage);
 
 app.use(logger('dev'));
-app.use(body_parser());
+app.use(body_parser.urlencoded({
+    extended: true
+}));
+app.use(body_parser.json());
+app.use('/api',router);
 
 app.get('/clothes', clothes.findAll);
 app.get('/clothes/:id', clothes.findById);
@@ -30,10 +42,6 @@ app.post('/photos', photos.upload);
 app.get('/photos', photos.getPhotos);
 app.get('/photos/full/:id', photos.getPhotoFull);
 app.get('/photos/thumb/:id', photos.getPhotoThumb)
-
-app.get('/messages', messages.findAll);
-app.post('/messages', messages.sendMessage);
-app.get('/messages:id', messages.getMessage);
 
 app.listen(3000);
 console.log('Listening on port 3000...');
