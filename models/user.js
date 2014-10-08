@@ -23,7 +23,6 @@ var UserSchema = new mongoose.Schema({
     },
     is_active:{
         type: Boolean,
-        required: true,
         default: true
     },
     last_login:{
@@ -56,4 +55,4 @@ UserSchema.methods.verifyPassword = function(password, cb) {
     });
 };
 
-//module.exports = mongoose.model('User', UserSchema);
+module.exports = mongoose.model('User', UserSchema);

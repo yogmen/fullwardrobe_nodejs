@@ -1,8 +1,3 @@
-/**
- * Created by robert on 07/10/14.
- */
-
-
 var Message = require('../models/message');
 
 exports.sendMessage = function (req, res) {
