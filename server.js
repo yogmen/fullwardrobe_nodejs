@@ -9,6 +9,7 @@ var	photos = require('./routes/photos');
 var	messages = require('./routes/messages');
 
 var messageController = require('./controllers/message');
+var userController = require('./controllers/user');
 
 
 
@@ -18,6 +19,10 @@ mongoose.connect('mongodb://localhost:27017/fullwardrobedb');
 
 router.route('/messages')
     .post(messageController.sendMessage);
+
+router.route('/users')
+    .post(userController.postUser)
+    .get(userController.getUsers);
 
 app.use(logger('dev'));
 app.use(body_parser.urlencoded({
