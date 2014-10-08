@@ -24,7 +24,7 @@ app.use(body_parser.urlencoded({
     extended: true
 }));
 app.use(body_parser.json());
-app.use('/api',router);
+app.use('/api', router);
 
 app.get('/clothes', clothes.findAll);
 app.get('/clothes/:id', clothes.findById);

@@ -21,6 +21,20 @@ var MessageSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    message_type: {
+        type: String,
+        default: 'regular'
+    },
+    price: {
+        type: String
+    },
+    item_to_exchange: {
+        type: String
+    },
+    deleted: {
+        type: Boolean,
+        default: false
+    },
     readed: {
         type: Boolean,
         default: false
