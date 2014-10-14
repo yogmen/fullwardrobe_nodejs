@@ -18,7 +18,12 @@ var router = express.Router();
 mongoose.connect('mongodb://localhost:27017/fullwardrobedb');
 
 router.route('/messages')
-    .post(authController.isAuthenticated, messageController.sendMessage);
+    .post(authController.isAuthenticated, messageController.sendMessage)
+    .get(authController.isAuthenticated, messageController.getMessages)
+    .put(authController.isAuthenticated, messageController.updateMessage);
+
+router.route('/message/:message_id')
+    .get(authController.isAuthenticated, messageController.getMessage);
 
 router.route('/users')
     .post(userController.postUser)
