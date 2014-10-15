@@ -24,62 +24,53 @@ exports.getMessage = function (req, res) {
     })
 };
 
-exports.getMessages = function (req, res) {
+exports.getMessages = function(req, res) {
+    var allowedParams = [
+        'deleted',
+        'readed',
+        'from'
+    ];
 
-    var from = req.query.from;
-    var deleted = req.query.deleted;
-    var readed = req.query.readed;
+    var query = {
+        to: req.user.email
+    };
 
-    if(from && deleted && readed) {
-
-    } else if(from && deleted) {
-
-    } else if (from && readed) {
-
-    } else if(deleted && readed) {
-        Message.find({to: req.user.email, deleted: deleted, readed: readed}, function (err, messages) {
-            if(err) {
-                res.send(err);
-            }
-            res.json(messages);
-        });
-    } else if(deleted){
-        Message.find({to: req.user.email, deleted: deleted}, function(err, messages) {
-            if(err) {
-                req.send(err);
-            }
-            res.json(messages);
-        })
-    } else if(readed){
-        Message.find({to: req.user.email, readed: readed}, function(err, messages) {
-            if(err) {
-                req.send(err);
-            }
-            res.json(messages);
-        });
-    } else if(from){
-        Message.find({to: req.user.email, from: from}, function(err, messages) {
-            if(err) {
-                req.send(err);
-            }
-            res.json(messages);
-        });
+    for(param in req.query) {
+        if(allowedParams.indexOf(param) !== -1) {
+            query[param] = req.query[param];
+        }
     }
+
+    console.log(query);
+
+    Message.find(query, function (err, messages) {
+        if(err) {
+            res.send(err);
+        }
+        res.json(messages);
+    })
 };
-
-
 
 exports.updateMessage = function (req, res) {
 
-};
+    var readed = req.query.deleted;
+    var deleted = req.query.readed;
 
-function findUser(userEmail, callback) {
-    User.findOne({email: userEmail}, function(err, user) {
+    Message.findById(req.params.message_id, function(err, message) {
         if(err) {
-            return "";
+            res.send(err);
         }
-        if(user) {
-            return callback(user._id);
-        }
+//        if(readed) {
+            message.readed = readed;
+//        }
+//        if(deleted) {
+            message.deleted = deleted;
+//        }
+        message.save(function(err) {
+            if(err) {
+                res.send(err);
+            }
+            res.json({code: '200', message: 'Saved'});
+        })
     });
-}
+};

@@ -17,17 +17,22 @@ var app = express();
 var router = express.Router();
 mongoose.connect('mongodb://localhost:27017/fullwardrobedb');
 
+/** MESSAGE OPERATIONS **/
 router.route('/messages')
     .post(authController.isAuthenticated, messageController.sendMessage)
-    .get(authController.isAuthenticated, messageController.getMessages)
-    .put(authController.isAuthenticated, messageController.updateMessage);
+    .get(authController.isAuthenticated, messageController.getMessages);
 
 router.route('/message/:message_id')
-    .get(authController.isAuthenticated, messageController.getMessage);
+    .get(authController.isAuthenticated, messageController.getMessage)
+    .put(authController.isAuthenticated, messageController.updateMessage);
 
+/** USER OPERATIONS **/
 router.route('/users')
     .post(userController.postUser)
     .get(authController.isAuthenticated, userController.getUsers);
+
+router.route('/users/:user_id')
+    .get(authController.isAuthenticated, userController.getUser);
 
 app.use(passport.initialize());
 app.use(logger('dev'));
