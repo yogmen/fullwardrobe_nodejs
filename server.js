@@ -12,10 +12,19 @@ var messages = require('./routes/messages');
 var authController = require('./controllers/auth');
 var messageController = require('./controllers/message');
 var userController = require('./controllers/user');
+var itemController = require('./controllers/item');
 
 var app = express();
 var router = express.Router();
 mongoose.connect('mongodb://localhost:27017/fullwardrobedb');
+
+/** ITEM OPERATIONS **/
+router.route('/items')
+    .post(authController.isAuthenticated, itemController.sendItem)
+    .get(authController.isAuthenticated, itemController.getItems);
+
+router.route('/item/:item_id')
+    .get(authController.isAuthenticated, itemController.getItem);
 
 /** MESSAGE OPERATIONS **/
 router.route('/messages')

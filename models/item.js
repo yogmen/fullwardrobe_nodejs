@@ -28,7 +28,7 @@ var ItemSchema = new mongoose.Schema({
     photos_id: {
         type: String
     },
-    owner_id: {
+    owner: {
         type: String,
         required: true
     },
