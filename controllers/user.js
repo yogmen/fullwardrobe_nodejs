@@ -8,8 +8,9 @@ exports.postUser = function (req, res) {
         if (err) {
             res.send(err);
             console.log(err);
+            return;
         }
-        res.send({code: '200', message: 'Saved'});
+        res.json(user);
         console.log('Saved new user: ' + user);
     });
 };

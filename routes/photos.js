@@ -93,6 +93,7 @@ exports.upload = function(req, res){
 	});
 }
 
+
 exports.getPhotos = function(req, res, next) {
     var images = db.collection('images');
 
