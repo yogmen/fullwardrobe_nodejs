@@ -52,25 +52,10 @@ exports.getMessages = function(req, res) {
 };
 
 exports.updateMessage = function (req, res) {
-
-    var readed = req.query.deleted;
-    var deleted = req.query.readed;
-
-    Message.findById(req.params.message_id, function(err, message) {
-        if(err) {
+    console.log(req.body);
+    Message.findByIdAndUpdate(req.params.message_id, req.body, function(err, result){
+        if(err)
             res.send(err);
-        }
-//        if(readed) {
-            message.readed = readed;
-//        }
-//        if(deleted) {
-            message.deleted = deleted;
-//        }
-        message.save(function(err) {
-            if(err) {
-                res.send(err);
-            }
-            res.json({code: '200', message: 'Saved'});
-        })
+        res.json(result);
     });
 };

@@ -36,3 +36,12 @@ exports.getUser = function (req, res) {
         res.json(user);
     })
 };
+
+exports.updateUser=function(req, res, next) {
+    console.log(req.params.user_id);
+  User.findByIdAndUpdate(req.params.user_id, req.body, function (err, result) {
+    if (err) 
+        return next(err);
+    res.json(result);
+  });
+};

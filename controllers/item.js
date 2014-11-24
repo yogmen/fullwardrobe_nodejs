@@ -39,16 +39,9 @@ exports.getItems = function (req,res){
 }
 
 exports.updateItem = function (req,res){
-    Item.findById(req.param.item_id, function(err, item) {
-        if(err) {
+    Item.findByIdAndUpdate(req,params.item_id, req.body, function(err, result){
+        if(err)
             res.send(err);
-            console.log(err);
-        }
-        item.save(function(err) {
-            if(err) {
-                res.send(err);
-                console.log(err);
-            }
-        })
-    })
+        res.json(result);
+    });
 }

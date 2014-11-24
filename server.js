@@ -28,7 +28,8 @@ router.route('/items')
     .get(authController.isAuthenticated, itemController.getItems);
 
 router.route('/item/:item_id')
-    .get(authController.isAuthenticated, itemController.getItem);
+    .get(authController.isAuthenticated, itemController.getItem)
+    .put(authController.isAuthenticated, itemController.updateItem);
 
 /** MESSAGE OPERATIONS **/
 router.route('/messages')
@@ -45,7 +46,8 @@ router.route('/users')
     .get(authController.isAuthenticated, userController.getUsers);
 
 router.route('/users/:user_id')
-    .get(authController.isAuthenticated, userController.getUser);
+    .get(authController.isAuthenticated, userController.getUser)
+    .put(authController.isAuthenticated, userController.updateUser);
 
 app.use(passport.initialize());
 app.use(logger('dev'));
@@ -57,18 +59,6 @@ app.use(body_parser.urlencoded({
 
 
 app.use('/api', router);
-
-//app.get('/clothes', clothes.findAll);
-//app.get('/clothes/:id', clothes.findById);
-//app.post('/clothes', clothes.addClothes);
-//app.put('/clothes/:id', clothes.updateClothes);
-//app.delete('/clothes/:id', clothes.deleteClothes);
-//app.get('/userClothes/:id', clothes.findUserClothes);
-//
-//app.post('/photos', photos.upload);
-////app.get('/photos', photos.getPhotos);
-////app.get('/photos/full/:id', photos.getPhotoFull);
-////app.get('/photos/thumb/:id', photos.getPhotoThumb)
 
 app.listen(3000);
 console.log('Listening on port 3000...');
