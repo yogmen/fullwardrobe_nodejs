@@ -1,7 +1,7 @@
 var fs = require('fs');
 var formidable = require('formidable');
 var im = require('imagemagick');
-var util = require('util');
+var path = require('path');
 
 var Photo = require('../models/photo');
 
@@ -67,9 +67,23 @@ exports.upload = function(req, res){
 }
 
 exports.getPhotoFull = function(req,res){
-    
+    Photo.findById(req.params.photo_id, function(err, photo){
+        if(err){
+            console.log(err);
+            res.send(err);
+        }
+        console.log(photo);
+        res.sendFile(path.resolve(photoDir + photo.fullsize_name));
+    });
 }
 
 exports.getPhotoThumb = function(req,res){
-    
+    Photo.findById(req.params.photo_id, function(err, photo){
+        if(err){
+            console.log(err);
+            res.send(err);
+        }
+        console.log(photo);
+        res.sendFile(path.resolve(photoDir + photo.thumbsize_name));
+    });
 }

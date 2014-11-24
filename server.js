@@ -23,8 +23,10 @@ mongoose.connect('mongodb://localhost:27017/fullwardrobedb');
 router.route('/photos')
     .post(authController.isAuthenticated, photoController.upload);
 
-router.route('/photos/:photo_id')
-    .get(authController.isAuthenticated, photoController.getPhotos);
+router.route('/photos/full/:photo_id')
+    .get(authController.isAuthenticated, photoController.getPhotoFull);
+router.route('/photos/thumb/:photo_id')
+    .get(authController.isAuthenticated, photoController.getPhotoThumb);
 
 /** ITEM OPERATIONS **/
 router.route('/items')
