@@ -25,15 +25,29 @@ exports.getItem = function (req,res){
 }
 
 exports.getItems = function (req,res){
-    //TODO extends for other params
-    var query = {
-        owner: req.user.email
-    };
-
-    Message.find(query, function(err, items) {
-        if(err) {
-            req.send(err);
+    var allowedParams = [
+        'item_type',
+        'item_sex',
+        'size',
+        'color',
+        'owner'
+        
+    ]
+    
+    var query = {};
+    
+    for(param in req.query) {
+        if(allowedParams.indexOf(param) !== -1){
+            console.log("true")
+            query[param] = req.query[param];
         }
+    }
+    
+    console.log(query);
+    
+    Item.find(query, function(err, items){
+        if(err)
+            res.send(err);
         res.json(items);
     });
 }

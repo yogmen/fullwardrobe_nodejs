@@ -22,6 +22,10 @@ mongoose.connect('mongodb://localhost:27017/fullwardrobedb');
 /** PHOTO OPERATIONS **/
 router.route('/photos')
     .post(authController.isAuthenticated, photoController.upload);
+
+router.route('/photos/:photo_id')
+    .get(authController.isAuthenticated, photoController.getPhotos);
+
 /** ITEM OPERATIONS **/
 router.route('/items')
     .post(authController.isAuthenticated, itemController.sendItem)
@@ -51,7 +55,6 @@ router.route('/users/:user_id')
 
 app.use(passport.initialize());
 app.use(logger('dev'));
-app.use(multipartMiddleware);
 app.use(body_parser.json());
 app.use(body_parser.urlencoded({
     extended: true

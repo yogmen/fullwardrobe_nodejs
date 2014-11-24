@@ -58,4 +58,4 @@ exports.updateMessage = function (req, res) {
             res.send(err);
         res.json(result);
     });
-};
+}
