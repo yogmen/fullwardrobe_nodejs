@@ -54,6 +54,7 @@ router.route('/users')
 router.route('/users/:user_id')
     .get(authController.isAuthenticated, userController.getUser)
     .put(authController.isAuthenticated, userController.updateUser);
+//.put(userController.updateUser);
 
 app.use(passport.initialize());
 app.use(logger('dev'));

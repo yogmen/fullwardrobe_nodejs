@@ -27,7 +27,10 @@ var UserSchema = new mongoose.Schema({
     },
     last_login:{
         type: Date
-    }
+    },
+    user_height:{
+        type: String
+    },
 });
 
 UserSchema.pre('save', function (callback) {
