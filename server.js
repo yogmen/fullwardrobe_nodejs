@@ -5,9 +5,6 @@ var mongoose = require('mongoose');
 var passport = require('passport');
 var multipart = require('connect-multiparty');
 
-//var clothes = require('./routes/clothes');
-//var photos = require('./routes/photos');
-
 var authController = require('./controllers/auth');
 var messageController = require('./controllers/message');
 var userController = require('./controllers/user');
@@ -24,16 +21,16 @@ router.route('/photos')
     .post(authController.isAuthenticated, photoController.upload);
 
 router.route('/photos/full/:photo_id')
-    .get(authController.isAuthenticated, photoController.getPhotoFull);
+    .get(photoController.getPhotoFull);
 router.route('/photos/thumb/:photo_id')
-    .get(authController.isAuthenticated, photoController.getPhotoThumb);
+    .get(photoController.getPhotoThumb);
 
 /** ITEM OPERATIONS **/
 router.route('/items')
     .post(authController.isAuthenticated, itemController.sendItem)
     .get(authController.isAuthenticated, itemController.getItems);
 
-router.route('/item/:item_id')
+router.route('/items/:item_id')
     .get(authController.isAuthenticated, itemController.getItem)
     .put(authController.isAuthenticated, itemController.updateItem);
 
@@ -42,7 +39,7 @@ router.route('/messages')
     .post(authController.isAuthenticated, messageController.sendMessage)
     .get(authController.isAuthenticated, messageController.getMessages);
 
-router.route('/message/:message_id')
+router.route('/messages/:message_id')
     .get(authController.isAuthenticated, messageController.getMessage)
     .put(authController.isAuthenticated, messageController.updateMessage);
 

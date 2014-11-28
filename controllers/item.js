@@ -30,15 +30,14 @@ exports.getItems = function (req,res){
         'item_sex',
         'size',
         'color',
-        'owner'
-        
-    ]
+        'owner',
+        'is_active'
+        ]
     
     var query = {};
     
     for(param in req.query) {
         if(allowedParams.indexOf(param) !== -1){
-            console.log("true")
             query[param] = req.query[param];
         }
     }
@@ -53,7 +52,7 @@ exports.getItems = function (req,res){
 }
 
 exports.updateItem = function (req,res){
-    Item.findByIdAndUpdate(req,params.item_id, req.body, function(err, result){
+    Item.findByIdAndUpdate(req.params.item_id, req.body, function(err, result){
         if(err)
             res.send(err);
         res.json(result);

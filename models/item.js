@@ -37,7 +37,13 @@ var ItemSchema = new mongoose.Schema({
     },
     longitude: {
         type: String
+    },
+    is_active: {
+        type: Boolean,
+        required: true,
+        default: true
     }
+    
 });
 
 module.exports = mongoose.model('Item', ItemSchema);
